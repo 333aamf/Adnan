@@ -1,191 +1,137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr" id="main-html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Ceramics | Premium Tiles & Stone</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    
+    <title>Elite Ceramics | WhatsApp Orders</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --stone: #2c2c2c;
-            --marble: #f4f4f4;
-            --gold: #c5a059; /* Elegant accent color */
-            --white: #ffffff;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-
-        body { background-color: var(--marble); color: var(--stone); line-height: 1.6; }
-
-        /* Navigation */
-        nav {
-            padding: 20px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--white);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .logo { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: bold; letter-spacing: 1px; }
-
-        /* Hero Section */
-        .hero {
-            height: 80vh;
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
-                        url('https://images.unsplash.com/photo-1600585152220-90363fe7e115?auto=format&fit=crop&w=1600&q=80');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-            padding: 0 20px;
-        }
-
-        .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(40px, 8vw, 80px); margin-bottom: 20px; }
-        .hero p { font-size: 18px; max-width: 600px; margin-bottom: 30px; font-weight: 300; }
-
-        .btn-main {
-            padding: 15px 40px;
-            background-color: var(--gold);
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            border-radius: 4px;
-            transition: 0.3s;
-        }
-
-        .btn-main:hover { background-color: #b08e4d; transform: translateY(-2px); }
-
-        /* Catalog Section */
-        .section { padding: 80px 5%; }
-        .section-title { text-align: center; font-family: 'Playfair Display', serif; font-size: 36px; margin-bottom: 50px; }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .tile-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: 0.3s;
-        }
-
-        .tile-card:hover { transform: translateY(-10px); }
-        .tile-img { width: 100%; height: 250px; background-color: #ddd; object-fit: cover; }
-        .tile-info { padding: 20px; }
-        .tile-info h3 { margin-bottom: 10px; }
+        :root { --gold: #c5a059; --dark: #1a1a1a; --bg: #f4f4f4; }
+        body { margin: 0; font-family: 'Cairo', sans-serif; background: var(--bg); }
         
-        .sample-btn {
-            display: inline-block;
-            margin-top: 15px;
-            color: var(--gold);
-            text-decoration: none;
-            font-weight: 600;
-            border-bottom: 2px solid var(--gold);
-            padding-bottom: 2px;
+        /* Navigation */
+        nav { display: flex; justify-content: space-between; padding: 15px 5%; background: white; align-items: center; }
+        .lang-btn { cursor: pointer; border: 1px solid var(--gold); background: none; color: var(--gold); padding: 5px 15px; border-radius: 5px; }
+
+        /* Product Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 40px 5%; }
+        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .card img { width: 100%; height: 200px; object-fit: cover; }
+        .card-content { padding: 20px; }
+        .request-btn { background: var(--gold); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+
+        /* Modal / Form Overlay */
+        #form-overlay { 
+            position: fixed; top:0; left:0; width:100%; height:100%; 
+            background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 1000;
         }
-
-        /* Sample Form Section */
-        #request-sample { background: var(--stone); color: white; border-radius: 20px; margin: 20px; padding: 60px 40px; }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-size: 14px; }
-        input, select, textarea { width: 100%; padding: 12px; border: none; border-radius: 4px; }
-
-        footer { text-align: center; padding: 40px; font-size: 14px; opacity: 0.6; }
+        .form-card { background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        label { font-size: 14px; color: #666; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">ELITE CERAMICS</div>
-        <div class="nav-links">
-            <a href="#catalog" style="text-decoration: none; color: var(--stone); font-weight: 600;">Catalog</a>
-        </div>
-    </nav>
+<nav>
+    <div style="font-weight: bold; font-size: 20px;">ELITE CERAMICS</div>
+    <button class="lang-btn" onclick="toggleLang()" id="langSwitcher">عربي</button>
+</nav>
 
-    <header class="hero">
-        <h1>Foundation of Elegance</h1>
-        <p>Premium tiles and ceramics for modern architecture. Request your custom sample today.</p>
-        <a href="#request-sample" class="btn-main">Request a Free Sample</a>
-    </header>
+<div class="grid" id="product-list"></div>
 
-    <section class="section" id="catalog">
-        <h2 class="section-title">Our Collection</h2>
-        <div class="grid">
-            <div class="tile-card">
-                <img src="https://images.unsplash.com/photo-1523413555809-0fb1d4da238d?auto=format&fit=crop&w=500&q=80" alt="Marble" class="tile-img">
-                <div class="tile-info">
-                    <h3>Bianco Carrara</h3>
-                    <p>Italian polished marble for luxury bathrooms and kitchens.</p>
-                    <a href="#request-sample" class="sample-btn">Request Sample</a>
-                </div>
-            </div>
-            <div class="tile-card">
-                <img src="https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?auto=format&fit=crop&w=500&q=80" alt="Stone" class="tile-img">
-                <div class="tile-info">
-                    <h3>Anthracite Slate</h3>
-                    <p>Natural matte finish slate for modern exterior flooring.</p>
-                    <a href="#request-sample" class="sample-btn">Request Sample</a>
-                </div>
-            </div>
-            <div class="tile-card">
-                <img src="https://images.unsplash.com/photo-1505330622279-bf7d7fc918f4?auto=format&fit=crop&w=500&q=80" alt="Ceramic" class="tile-img">
-                <div class="tile-info">
-                    <h3>Mediterranean Blue</h3>
-                    <p>Hand-crafted ceramic tiles with a glossy glaze finish.</p>
-                    <a href="#request-sample" class="sample-btn">Request Sample</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="request-sample">
-        <h2 style="font-family: 'Playfair Display', serif; font-size: 32px; margin-bottom: 30px;">Sample Request Form</h2>
-        <p style="margin-bottom: 30px; opacity: 0.8;">Select your products and we will deliver samples to your site.</p>
+<div id="form-overlay">
+    <div class="form-card">
+        <h2 id="form-title">Request Sample</h2>
+        <label id="lbl-name">Your Name</label>
+        <input type="text" id="cust-name" placeholder="Enter your name">
         
-        <form id="sampleForm">
-            <div class="form-group">
-                <label>Your Name</label>
-                <input type="text" placeholder="Full Name" required>
-            </div>
-            <div class="form-group">
-                <label>Project Address</label>
-                <input type="text" placeholder="Delivery address for samples" required>
-            </div>
-            <div class="form-group">
-                <label>Select Tile Type</label>
-                <select>
-                    <option>Bianco Carrara (Marble)</option>
-                    <option>Anthracite Slate (Stone)</option>
-                    <option>Mediterranean Blue (Ceramic)</option>
-                </select>
-            </div>
-            <button type="submit" class="btn-main" style="width: 100%; border: none; cursor: pointer;">Send My Samples</button>
-        </form>
-    </section>
+        <label id="lbl-prod">Product</label>
+        <input type="text" id="cust-prod" readonly style="background: #eee;">
+        
+        <button class="request-btn" onclick="sendToWhatsApp()" id="send-btn">Send to WhatsApp</button>
+        <button onclick="closeForm()" style="background:none; border:none; color:#999; width:100%; margin-top:10px; cursor:pointer;">Cancel</button>
+    </div>
+</div>
 
-    <footer>
-        &copy; 2026 Elite Ceramics Supply Co. All Rights Reserved.
-    </footer>
+<script>
+    // 1. YOUR DATA
+    const data = {
+        phone: "966500000000", // CHANGE THIS to your client's WhatsApp number
+        en: {
+            btn: "Request Sample",
+            formTitle: "Sample Inquiry",
+            lblName: "Your Name",
+            lblProd: "Selected Product",
+            send: "Send via WhatsApp",
+            items: [
+                { name: "Carrara White", desc: "Classic Italian Marble", img: "https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?w=400" },
+                { name: "Royal Slate", desc: "Durable grey stone", img: "https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?w=400" }
+            ]
+        },
+        ar: {
+            btn: "اطلب عينة",
+            formTitle: "طلب عينة",
+            lblName: "الاسم",
+            lblProd: "المنتج المختار",
+            send: "إرسال عبر واتساب",
+            items: [
+                { name: "رخام كاريرا", desc: "رخام إيطالي كلاسيكي", img: "https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?w=400" },
+                { name: "سليت ملكي", desc: "حجر رمادي متين", img: "https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?w=400" }
+            ]
+        }
+    };
 
-    <script>
-        document.getElementById('sampleForm').onsubmit = (e) => {
-            e.preventDefault();
-            alert("Thank you! Your sample request has been sent. Our team will contact you shortly.");
-        };
-    </script>
+    let currentLang = 'en';
 
+    function renderItems() {
+        const list = document.getElementById('product-list');
+        list.innerHTML = '';
+        data[currentLang].items.forEach(item => {
+            list.innerHTML += `
+                <div class="card">
+                    <img src="${item.img}">
+                    <div class="card-content">
+                        <h3>${item.name}</h3>
+                        <p>${item.desc}</p>
+                        <button class="request-btn" onclick="openForm('${item.name}')">${data[currentLang].btn}</button>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function openForm(productName) {
+        document.getElementById('cust-prod').value = productName;
+        document.getElementById('form-title').innerText = data[currentLang].formTitle;
+        document.getElementById('lbl-name').innerText = data[currentLang].lblName;
+        document.getElementById('lbl-prod').innerText = data[currentLang].lblProd;
+        document.getElementById('send-btn').innerText = data[currentLang].send;
+        document.getElementById('form-overlay').style.display = 'flex';
+    }
+
+    function closeForm() { document.getElementById('form-overlay').style.display = 'none'; }
+
+    function sendToWhatsApp() {
+        const name = document.getElementById('cust-name').value;
+        const prod = document.getElementById('cust-prod').value;
+        if(!name) return alert("Please enter your name");
+
+        const message = currentLang === 'en' 
+            ? `Hello, my name is ${name}. I am interested in a sample of: ${prod}`
+            : `مرحباً، اسمي ${name}. أنا مهتم بالحصول على عينة من: ${prod}`;
+        
+        const url = `https://wa.me/${data.phone}?text=${encodeURIComponent(message)}`;
+        window.open(url, '_blank');
+    }
+
+    function toggleLang() {
+        currentLang = currentLang === 'en' ? 'ar' : 'en';
+        document.getElementById('main-html').dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+        document.getElementById('langSwitcher').innerText = currentLang === 'en' ? 'عربي' : 'English';
+        renderItems();
+    }
+
+    renderItems();
+</script>
 </body>
 </html>
