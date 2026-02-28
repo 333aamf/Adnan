@@ -3,135 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Ceramics | WhatsApp Orders</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <title>Elite Ceramics Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #c5a059; --dark: #1a1a1a; --bg: #f4f4f4; }
-        body { margin: 0; font-family: 'Cairo', sans-serif; background: var(--bg); }
+        :root { --gold: #c5a059; --dark: #1a1a1a; --bg: #f8f9fa; --white: #ffffff; }
+        body { margin: 0; font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--dark); }
         
-        /* Navigation */
-        nav { display: flex; justify-content: space-between; padding: 15px 5%; background: white; align-items: center; }
-        .lang-btn { cursor: pointer; border: 1px solid var(--gold); background: none; color: var(--gold); padding: 5px 15px; border-radius: 5px; }
-
-        /* Product Grid */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 40px 5%; }
-        .card { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .card img { width: 100%; height: 200px; object-fit: cover; }
+        /* Nav */
+        nav { display: flex; justify-content: space-between; padding: 20px 5%; background: var(--white); align-items: center; position: sticky; top:0; z-index: 100; box-shadow: 0 2px 15px rgba(0,0,0,0.05); }
+        .logo { font-family: 'Playfair Display', serif; font-weight: bold; font-size: 24px; cursor: pointer; }
+        
+        /* Grid */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; padding: 40px 5%; }
+        .card { background: var(--white); border-radius: 20px; overflow: hidden; transition: 0.3s; border: 1px solid #eee; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .card img { width: 100%; height: 250px; object-fit: cover; }
         .card-content { padding: 20px; }
-        .request-btn { background: var(--gold); color: white; border: none; width: 100%; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        
+        /* Buttons */
+        .btn-gold { background: var(--gold); color: white; border: none; width: 100%; padding: 15px; border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        .btn-admin { background: #333; color: white; padding: 10px 20px; border-radius: 8px; border: none; cursor: pointer; margin: 20px 5%; }
 
-        /* Modal / Form Overlay */
-        #form-overlay { 
-            position: fixed; top:0; left:0; width:100%; height:100%; 
-            background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 1000;
-        }
-        .form-card { background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        label { font-size: 14px; color: #666; }
+        /* Modals */
+        .modal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(5px); }
+        .modal-content { background: white; padding: 40px; border-radius: 24px; width: 90%; max-width: 500px; }
+        input, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; font-family: inherit; }
+        
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <nav>
-    <div style="font-weight: bold; font-size: 20px;">ELITE CERAMICS</div>
-    <button class="lang-btn" onclick="toggleLang()" id="langSwitcher">عربي</button>
+    <div class="logo" onclick="askAdmin()">ELITE CERAMICS</div>
+    <div>
+        <button class="btn-gold" style="padding: 8px 15px; width: auto;" onclick="toggleLang()" id="langBtn">عربي</button>
+    </div>
 </nav>
+
+<div id="admin-controls" class="hidden">
+    <button class="btn-admin" onclick="openAdminModal()">+ Add New Product</button>
+</div>
 
 <div class="grid" id="product-list"></div>
 
-<div id="form-overlay">
-    <div class="form-card">
-        <h2 id="form-title">Request Sample</h2>
-        <label id="lbl-name">Your Name</label>
-        <input type="text" id="cust-name" placeholder="Enter your name">
-        
-        <label id="lbl-prod">Product</label>
-        <input type="text" id="cust-prod" readonly style="background: #eee;">
-        
-        <button class="request-btn" onclick="sendToWhatsApp()" id="send-btn">Send to WhatsApp</button>
-        <button onclick="closeForm()" style="background:none; border:none; color:#999; width:100%; margin-top:10px; cursor:pointer;">Cancel</button>
+<div id="request-modal" class="modal">
+    <div class="modal-content">
+        <h2 id="m-title">Inquiry</h2>
+        <input type="text" id="cust-name" placeholder="Full Name">
+        <input type="text" id="cust-prod" readonly style="background: #f0f0f0;">
+        <button class="btn-gold" onclick="sendWhatsApp()" id="m-send">Send WhatsApp</button>
+        <button onclick="closeModals()" style="width:100%; background:none; border:none; margin-top:15px; color:#999; cursor:pointer;">Close</button>
+    </div>
+</div>
+
+<div id="admin-modal" class="modal">
+    <div class="modal-content">
+        <h2>Add to Catalog</h2>
+        <input type="text" id="new-name-en" placeholder="Product Name (English)">
+        <input type="text" id="new-name-ar" placeholder="Product Name (Arabic)">
+        <textarea id="new-desc-en" placeholder="Description (English)"></textarea>
+        <textarea id="new-desc-ar" placeholder="Description (Arabic)"></textarea>
+        <input type="text" id="new-img" placeholder="Image URL (Link from ImgBB)">
+        <button class="btn-gold" onclick="saveProduct()">Save Product</button>
+        <button onclick="closeModals()" style="width:100%; background:none; border:none; margin-top:15px; color:#999; cursor:pointer;">Cancel</button>
     </div>
 </div>
 
 <script>
-    // 1. YOUR DATA
-    const data = {
-        phone: "966580440967", // CHANGE THIS to your client's WhatsApp number
-        en: {
-            btn: "Request Sample",
-            formTitle: "Sample Inquiry",
-            lblName: "Your Name",
-            lblProd: "Selected Product",
-            send: "Send via WhatsApp",
-            items: [
-                { name: "Carrara White", desc: "Classic Italian Marble", img: "https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?w=400" },
-                { name: "Royal Slate", desc: "Durable grey stone", img: "https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?w=400" }
-            ]
-        },
-        ar: {
-            btn: "اطلب عينة",
-            formTitle: "طلب عينة",
-            lblName: "الاسم",
-            lblProd: "المنتج المختار",
-            send: "إرسال عبر واتساب",
-            items: [
-                { name: "رخام كاريرا", desc: "رخام إيطالي كلاسيكي", img: "https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?w=400" },
-                { name: "سليت ملكي", desc: "حجر رمادي متين", img: "https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?w=400" }
-            ]
-        }
-    };
+    const WA_NUMBER = "966538913702"; // Client's WhatsApp
+    const ADMIN_PASS = "1234"; // Secret password
+    
+    // Load products from memory or use defaults
+    let products = JSON.parse(localStorage.getItem('ceramic_db')) || [
+        { en: {name:"Carrara", desc:"Italian Marble"}, ar: {name:"رخام كاريرا", desc:"رخام ايطالي"}, img: "https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?w=400" }
+    ];
 
     let currentLang = 'en';
 
-    function renderItems() {
+    function render() {
         const list = document.getElementById('product-list');
         list.innerHTML = '';
-        data[currentLang].items.forEach(item => {
+        products.forEach((p, index) => {
+            const content = p[currentLang];
             list.innerHTML += `
                 <div class="card">
-                    <img src="${item.img}">
+                    <img src="${p.img}">
                     <div class="card-content">
-                        <h3>${item.name}</h3>
-                        <p>${item.desc}</p>
-                        <button class="request-btn" onclick="openForm('${item.name}')">${data[currentLang].btn}</button>
+                        <h3>${content.name}</h3>
+                        <p>${content.desc}</p>
+                        <button class="btn-gold" onclick="openRequest('${content.name}')">
+                            ${currentLang === 'en' ? 'Request Sample' : 'اطلب عينة'}
+                        </button>
+                        <button class="btn-admin hidden admin-only" onclick="deleteProduct(${index})" style="background:red; margin:10px 0 0 0; width:100%;">Delete</button>
                     </div>
                 </div>
             `;
         });
+        checkAdminUI();
     }
 
-    function openForm(productName) {
-        document.getElementById('cust-prod').value = productName;
-        document.getElementById('form-title').innerText = data[currentLang].formTitle;
-        document.getElementById('lbl-name').innerText = data[currentLang].lblName;
-        document.getElementById('lbl-prod').innerText = data[currentLang].lblProd;
-        document.getElementById('send-btn').innerText = data[currentLang].send;
-        document.getElementById('form-overlay').style.display = 'flex';
+    // ADMIN LOGIC
+    function askAdmin() {
+        let p = prompt("Enter Admin Password:");
+        if(p === ADMIN_PASS) {
+            localStorage.setItem('is_admin', 'true');
+            checkAdminUI();
+        }
     }
 
-    function closeForm() { document.getElementById('form-overlay').style.display = 'none'; }
+    function checkAdminUI() {
+        if(localStorage.getItem('is_admin') === 'true') {
+            document.getElementById('admin-controls').classList.remove('hidden');
+            document.querySelectorAll('.admin-only').forEach(el => el.classList.remove('hidden'));
+        }
+    }
 
-    function sendToWhatsApp() {
+    function openAdminModal() { document.getElementById('admin-modal').style.display='flex'; }
+
+    function saveProduct() {
+        const newP = {
+            en: { name: document.getElementById('new-name-en').value, desc: document.getElementById('new-desc-en').value },
+            ar: { name: document.getElementById('new-name-ar').value, desc: document.getElementById('new-desc-ar').value },
+            img: document.getElementById('new-img').value
+        };
+        products.push(newP);
+        localStorage.setItem('ceramic_db', JSON.stringify(products));
+        closeModals();
+        render();
+    }
+
+    function deleteProduct(i) {
+        products.splice(i, 1);
+        localStorage.setItem('ceramic_db', JSON.stringify(products));
+        render();
+    }
+
+    // USER LOGIC
+    function openRequest(name) {
+        document.getElementById('cust-prod').value = name;
+        document.getElementById('m-title').innerText = currentLang === 'en' ? 'Sample Inquiry' : 'طلب عينة';
+        document.getElementById('request-modal').style.display = 'flex';
+    }
+
+    function sendWhatsApp() {
         const name = document.getElementById('cust-name').value;
         const prod = document.getElementById('cust-prod').value;
-        if(!name) return alert("Please enter your name");
-
-        const message = currentLang === 'en' 
-            ? `Hello, my name is ${name}. I am interested in a sample of: ${prod}`
-            : `مرحباً، اسمي ${name}. أنا مهتم بالحصول على عينة من: ${prod}`;
-        
-        const url = `https://wa.me/${data.phone}?text=${encodeURIComponent(message)}`;
-        window.open(url, '_blank');
+        const msg = encodeURIComponent(`${currentLang==='en'?'Hello':'مرحبا'}, ${name}. I want a sample of ${prod}`);
+        window.open(`https://wa.me/${WA_NUMBER}?text=${msg}`, '_blank');
     }
 
     function toggleLang() {
         currentLang = currentLang === 'en' ? 'ar' : 'en';
         document.getElementById('main-html').dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-        document.getElementById('langSwitcher').innerText = currentLang === 'en' ? 'عربي' : 'English';
-        renderItems();
+        document.getElementById('langBtn').innerText = currentLang === 'en' ? 'عربي' : 'English';
+        render();
     }
 
-    renderItems();
+    function closeModals() { document.querySelectorAll('.modal').forEach(m => m.style.display='none'); }
+
+    render();
 </script>
 </body>
 </html>
